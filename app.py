@@ -12,6 +12,7 @@ def home():
 @app.get("/predict/{coin_id}")
 def predict(coin_id: str):
     try:
+        # Ottiene i dati reali dal mercato (ultimi 7 giorni)
         url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart?vs_currency=usd&days=7"
         data = requests.get(url).json()
 
@@ -19,6 +20,7 @@ def predict(coin_id: str):
         X = np.arange(len(prices)).reshape(-1, 1)
         y = np.array(prices)
 
+        # Modello semplice di regressione lineare per predizione
         model = LinearRegression().fit(X, y)
         next_day = model.predict([[len(prices)]])[0]
 
@@ -30,3 +32,4 @@ def predict(coin_id: str):
 
     except Exception as e:
         return {"error": str(e)}
+
